@@ -2,9 +2,9 @@
 <html >
   <head>
     <meta charset="utf-8">
-    <title>行政機關辦公日曆</title>
-    <meta name="description" content="中華民國，政府，行政，機關，辦公日曆">
-	<meta name="keywords" content="行政機關辦公日曆表">
+    <title>行事曆</title>
+    <meta name="description" content="行事曆">
+	<meta name="keywords" content="行事曆">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!--link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /-->	
 	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.css" />
@@ -63,7 +63,7 @@ $(document).ready(function(){
 	
 	      
 	
-//open data 新北市政府辦公行事曆Json
+//新北opendata
 //var url = "https://data.ntpc.gov.tw/api/datasets/308dcd75-6434-45bc-a95f-584da4fed251/json?size=3650";
 var url = "cal.json";
 
@@ -123,7 +123,7 @@ $.getJSON( url, function(data) {
 				      
 	if (item.isholiday=="是")
     	{
-		if (item.holidaycategory=="特定節日"){   
+		if (item.holidaycategory=="特殊節日"){   
       			let myDate= new Date(item.date);	
       			if(myDate.getDay() == 6 || myDate.getDay() == 0)
         	 		caldays.push( holidayStr(item) );
@@ -134,7 +134,7 @@ $.getJSON( url, function(data) {
 	    		caldays.push( holidayStr(item) );
 		
      	}else{
-		if (item.holidaycategory=="補行上班日")
+		if (item.holidaycategory=="特殊上班日")
 			caldays.push( makeupdayStr(item) );
 		else  
 			caldays.push( workdayStr(item) );
@@ -195,7 +195,7 @@ $.getJSON( url, function(data) {
    
     <body>
 		<div id='calendar'>
-			<a href="https://data.ntpc.gov.tw/datasets/308DCD75-6434-45BC-A95F-584DA4FED251" target="_blank">來源:新北市政府資料開放平台</a> 
+		<!--	<a href="https://data.ntpc.gov.tw/datasets/308DCD75-6434-45BC-A95F-584DA4FED251" target="_blank">來源:新北市政府資料開放平台</a> -->
 	    	</div>
 	    	                                    
 	</body>
