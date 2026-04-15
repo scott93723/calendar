@@ -1,205 +1,716 @@
 <!doctype html>
-<html >
-  <head>
-    <meta charset="utf-8">
-    <title>行事曆</title>
-    <meta name="description" content="行事曆">
-	<meta name="keywords" content="行事曆">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!--link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /-->	
-	<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.css" />
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/locale/zh-tw.js"></script>
-	<!--script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script-->
-	<script src="//cdn.jsdelivr.net/npm/jquery-touchswipe@1.6.18/jquery.touchSwipe.min.js"></script>
-	<style type="text/css">
-	
-	@media screen and (min-width: 1000px) {
-		#calendar{
-			margin:0 auto;
-			width: 1000px;
-		}
-		
-		.fc-day-grid-event .fc-content{
-		  	font-size: 1.55em;
-			margin-top: 20px;
-		}
-		
-		.fc-today .fc-day-number{
-    			font-size: 1.8em;
-    		}
-	}
-		
-	.fc-widget-header .fc-sat,
-	.fc-widget-header .fc-sun{
-		color:red;
-	}
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>2077 行事曆｜霓虹年度日程面板</title>
+  <meta name="description" content="Cyberpunk 2077 風格繁體中文行事曆，保留原有節假日與補班邏輯，提供年度檢視、滑動切換與訪客計數顯示。">
+  <meta name="keywords" content="行事曆, 節假日, 補班, Cyberpunk 2077, FullCalendar, 繁體中文">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="2077 行事曆｜霓虹年度日程面板">
+  <meta property="og:description" content="深色科技風繁體中文行事曆，保留原始行事曆功能與節假日資料邏輯。">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:image" content="https://dummyimage.com/1200x630/0a0a0f/fcee09&text=2077+Calendar">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="2077 行事曆｜霓虹年度日程面板">
+  <meta name="twitter:description" content="深黑霓虹視覺的繁體中文年度行事曆。">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.css">
 
-	.fc-today .fc-day-number{
-		font-family: Arial;
-    		font-weight: 800;
-    		font-size:1.4em;
-		color:purple;
-		padding-bottom: 0;
-    	}
-		
-	/*	
-	.fc-today .fc-day-number{
-		float:left !important;
-	}
-	*/	
-		
-	.fc-day-grid-event .fc-content{
-		white-space: normal!important; 
-		text-align: center;  
-	}
-  </style>
-  <script>
-	  
-$(document).ready(function(){
-	
-	      
-	
-//新北opendata
-//var url = "https://data.ntpc.gov.tw/api/datasets/308dcd75-6434-45bc-a95f-584da4fed251/json?size=3650";
-var url = "cal.json";
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/locale/zh-tw.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery-touchswipe@1.6.18/jquery.touchSwipe.min.js"></script>
 
-	
-var caldays = [];
-var holidayStr = function(item){				
-  return  { 
-          title : item.chinese,
-          start  : item.date,
-          allDay: true,
-	  textColor: "red",
-   	  backgroundColor : "pink",
-          borderColor: "pink"
-     		 };
- }
- 
-var workdayStr = function(item){
-	return		{ 
-		  title : item.chinese,
-		  start  : item.date,
-		  allDay: true,
-		  textColor: "black",
-		  backgroundColor : "white",
-		  borderColor: "white"
-	      };
-}
-
-var makeupdayStr = function(item){
-	return		{ 
-		  title : item.holidaycategory,
-		  start  : item.date,
-		  allDay: true,
-		  textColor: "blue",
-		  backgroundColor : "white",
-		  borderColor: "white"
-	      };
-}
- 
-
-/* not workingXD
-jQuery.ajaxPrefilter(function(options) {
-    if (options.crossDomain && jQuery.support.cors) {
-        options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-soft: #10101a;
+      --panel: rgba(16, 16, 26, 0.88);
+      --panel-2: rgba(7, 7, 14, 0.92);
+      --yellow: #fcee09;
+      --pink: #ff003c;
+      --blue: #00f0ff;
+      --text: #f4f7ff;
+      --muted: #9aa4c3;
+      --line: rgba(0, 240, 255, 0.18);
+      --glow-yellow: 0 0 10px rgba(252, 238, 9, 0.45), 0 0 28px rgba(252, 238, 9, 0.16);
+      --glow-pink: 0 0 12px rgba(255, 0, 60, 0.55), 0 0 28px rgba(255, 0, 60, 0.2);
+      --glow-blue: 0 0 12px rgba(0, 240, 255, 0.55), 0 0 30px rgba(0, 240, 255, 0.2);
+      --radius: 20px;
     }
-});
-*/
 
-$.getJSON( url, function(data) {	  
-	  
-//  console.log('load data:' + data);
-	  
-  for(var i in data) {    
+    * {
+      box-sizing: border-box;
+    }
 
-    var item = data[i];   
-	  
-	item.date = item.date.replace('\\' , ''); //2023 date change to 2023\/12\/30
-				      
-	if (item.isholiday=="是")
-    	{
-		if (item.holidaycategory=="特殊節日"){   
-      			let myDate= new Date(item.date);	
-      			if(myDate.getDay() == 6 || myDate.getDay() == 0)
-        	 		caldays.push( holidayStr(item) );
-         		else
-         			caldays.push( workdayStr(item) );
-      		}
-		else
-	    		caldays.push( holidayStr(item) );
-		
-     	}else{
-		if (item.holidaycategory=="特殊上班日")
-			caldays.push( makeupdayStr(item) );
-		else  
-			caldays.push( workdayStr(item) );
-	    }
-	  
-	}//end for
+    html {
+      scroll-behavior: smooth;
+    }
 
-  $('#calendar').fullCalendar({
-	fixedWeekCount: false,
-  	contentHeight: 'auto',
-  	viewRender: function(view,element) {
-    
-    	//民國年月
-   		var curDate = 	$('#calendar').fullCalendar('getDate');
-      		var months = ",1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月".split(",");
-      		var year = "民國"+ (moment(curDate).format('YYYY') -1911)+"年";
-      		var mon =months[ moment(curDate).format('M')];
-       
-		var today = new Date();
-		var weekdays = "日,一,二,三,四,五,六".split(",");
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: 'Noto Sans TC', sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255, 0, 60, 0.12), transparent 28%),
+        radial-gradient(circle at left center, rgba(0, 240, 255, 0.12), transparent 32%),
+        linear-gradient(180deg, #0d0d15 0%, #07070d 45%, #05050a 100%);
+      overflow-x: hidden;
+      position: relative;
+    }
 
-		
-  		$('.fc-left').empty().append("<b>"+year+ mon+"</b>" );
-		
-		$('.fc-today-button').html("今天："+(today.getFullYear() -1911)+'/' + (today.getMonth() + 1) +'/' +today.getDate()+
-						'(' + weekdays[today.getDay()] +')' );
-		
- 		 
- 	},
-	events: caldays,
-    	eventRender: function (event, element, view) { 
-        // event.start is already a moment.js object
-        // we can apply .format()
-        var dateString = event.start.format("YYYY-MM-DD");
-        
-        //if (event.title!="補行上班日")
-	if (event.textColor=="red")
-        	$(view.el[0]).find('.fc-day[data-date=' + dateString + ']').css('background-color', 'pink');
-        
-       // $(element).tooltip({title: event.title});   
-     	}
-		});
-	
-	   $('#calendar').swipe( {
-    	//Generic swipe handler for all directions
-    		swipe:function(event, direction, distance, duration, fingerCount, fingerData) {
-			if (direction=="left")
-			  $('#calendar').fullCalendar('next');
-			if (direction=="right")
-			 $('#calendar').fullCalendar('prev');
- 	   	}
-	});
-	
-});
-});
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.03) 0,
+        rgba(255, 255, 255, 0.03) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: soft-light;
+      opacity: 0.2;
+      z-index: 1;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 240, 255, 0.04) 50%, transparent 100%);
+      animation: scanline 8s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes scanline {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(1180px, calc(100% - 24px));
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+
+    .hero,
+    .calendar-panel,
+    .footer {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .hero.in-view,
+    .calendar-panel.in-view,
+    .footer.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 28px 24px;
+      border: 1px solid rgba(252, 238, 9, 0.28);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(252, 238, 9, 0.08), rgba(255, 0, 60, 0.08) 45%, rgba(0, 240, 255, 0.08));
+      box-shadow: var(--glow-yellow), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero::before,
+    .calendar-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(252, 238, 9, 0.15), transparent 18%),
+        linear-gradient(180deg, transparent, rgba(0, 240, 255, 0.06));
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 0.9fr;
+      gap: 24px;
+      align-items: end;
+    }
+
+    .kicker,
+    .hero-title,
+    .system-badge,
+    .counter-label,
+    .footer {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--yellow);
+      font-size: 0.82rem;
+      margin-bottom: 12px;
+      text-shadow: var(--glow-yellow);
+    }
+
+    .kicker::before {
+      content: '';
+      width: 42px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: var(--glow-yellow);
+    }
+
+    .hero-title {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4.5rem);
+      line-height: 0.95;
+      color: var(--yellow);
+      text-shadow: var(--glow-yellow);
+    }
+
+    .hero-title span {
+      display: block;
+      color: var(--blue);
+      text-shadow: var(--glow-blue);
+      margin-top: 10px;
+    }
+
+    .hero-desc {
+      margin: 18px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .status-card {
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(5, 8, 18, 0.75);
+      box-shadow: var(--glow-blue);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .status-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .status-label {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .system-badge {
+      color: var(--pink);
+      text-shadow: var(--glow-pink);
+      font-size: 0.95rem;
+    }
+
+    .counter-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .counter-label {
+      color: var(--blue);
+      font-size: 0.78rem;
+      text-shadow: var(--glow-blue);
+    }
+
+    .counter-value {
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .calendar-panel {
+      position: relative;
+      margin-top: 22px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid rgba(0, 240, 255, 0.18);
+      box-shadow: var(--glow-blue), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+      overflow: hidden;
+    }
+
+    .panel-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .panel-title {
+      margin: 0;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--yellow);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      letter-spacing: 0.14em;
+      text-shadow: var(--glow-yellow);
+    }
+
+    .panel-hint {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    #calendar {
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .fc {
+      background: transparent;
+    }
+
+    .fc-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px !important;
+    }
+
+    .fc-left,
+    .fc-right,
+    .fc-center {
+      float: none !important;
+    }
+
+    .fc-center {
+      order: -1;
+      width: 100%;
+      text-align: left;
+    }
+
+    .fc-left h2,
+    .fc-left b {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.1rem, 3vw, 2rem);
+      color: var(--yellow);
+      text-shadow: var(--glow-yellow);
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
+
+    .fc button {
+      height: auto;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 240, 255, 0.28);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      text-transform: none;
+      box-shadow: none;
+      text-shadow: none;
+      transition: all 0.25s ease;
+    }
+
+    .fc button:hover,
+    .fc button:focus,
+    .fc button.fc-state-hover {
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--blue);
+      border-color: rgba(0, 240, 255, 0.55);
+      box-shadow: var(--glow-blue);
+      outline: none;
+    }
+
+    .fc button.fc-state-active,
+    .fc button.fc-state-down {
+      background: rgba(255, 0, 60, 0.14);
+      color: #fff;
+      border-color: rgba(255, 0, 60, 0.5);
+      box-shadow: var(--glow-pink);
+    }
+
+    .fc button .fc-icon {
+      color: inherit;
+    }
+
+    .fc-widget-header {
+      border-color: rgba(0, 240, 255, 0.18);
+      background: rgba(0, 240, 255, 0.06);
+      color: var(--blue);
+      font-family: 'Orbitron', sans-serif;
+      text-shadow: var(--glow-blue);
+      padding: 8px 0;
+    }
+
+    .fc-widget-header .fc-sat,
+    .fc-widget-header .fc-sun {
+      color: var(--pink);
+      text-shadow: var(--glow-pink);
+    }
+
+    .fc td,
+    .fc th {
+      border-color: rgba(0, 240, 255, 0.12);
+    }
+
+    .fc-day,
+    .fc-other-month {
+      background: rgba(255, 255, 255, 0.015);
+      transition: background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .fc-day:hover {
+      background: rgba(0, 240, 255, 0.04);
+      box-shadow: inset 0 0 0 1px rgba(0, 240, 255, 0.08);
+    }
+
+    .fc-day-number {
+      color: var(--text);
+      padding: 8px 10px 0 !important;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .fc-today {
+      background: rgba(252, 238, 9, 0.08) !important;
+      box-shadow: inset 0 0 0 1px rgba(252, 238, 9, 0.28);
+    }
+
+    .fc-today .fc-day-number {
+      color: var(--yellow);
+      font-weight: 800;
+      font-size: 1.12rem;
+      text-shadow: var(--glow-yellow);
+      padding-bottom: 0;
+    }
+
+    .fc-day-grid-event {
+      margin: 3px 4px 0;
+      padding: 3px 4px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .fc-day-grid-event .fc-content {
+      white-space: normal !important;
+      text-align: center;
+      line-height: 1.35;
+    }
+
+    .fc-ltr .fc-basic-view .fc-day-top .fc-day-number {
+      float: right;
+    }
+
+    .fc-unthemed .fc-divider,
+    .fc-unthemed .fc-popover .fc-header,
+    .fc-unthemed .fc-list-heading td {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .footer {
+      margin-top: 18px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      padding: 8px 10px 0;
+      letter-spacing: 0.14em;
+    }
+
+    .footer strong {
+      color: var(--yellow);
+      text-shadow: var(--glow-yellow);
+      font-weight: 700;
+    }
+
+    @media screen and (min-width: 1000px) {
+      .fc-day-grid-event .fc-content {
+        font-size: 1.08em;
+        margin-top: 8px;
+      }
+    }
+
+    @media screen and (max-width: 900px) {
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .counter-wrap {
+        align-items: flex-start;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      .shell {
+        width: min(100% - 16px, 1180px);
+        padding-top: 12px;
+      }
+
+      .hero,
+      .calendar-panel {
+        padding: 18px 14px;
+        border-radius: 16px;
+      }
+
+      .panel-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .fc-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .fc-center,
+      .fc-left,
+      .fc-right {
+        width: 100%;
+        text-align: left;
+      }
+
+      .fc-right {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .fc button {
+        width: auto;
+        max-width: 100%;
+        margin: 0 8px 8px 0 !important;
+      }
+
+      .fc-day-grid-event {
+        margin-left: 2px;
+        margin-right: 2px;
+      }
+
+      .fc-day-grid-event .fc-content {
+        font-size: 0.78rem;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .hero-title {
+        font-size: 1.8rem;
+      }
+
+      .hero-desc,
+      .panel-hint,
+      .status-label,
+      .counter-value {
+        font-size: 0.9rem;
+      }
+
+      .fc-day-number {
+        font-size: 0.8rem;
+        padding-right: 6px !important;
+      }
+
+      .fc-toolbar .fc-button-group {
+        display: flex;
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+
+  <script>
+    $(document).ready(function () {
+      var url = 'cal.json';
+      var caldays = [];
+
+      var holidayStr = function (item) {
+        return {
+          title: item.chinese,
+          start: item.date,
+          allDay: true,
+          textColor: 'red',
+          backgroundColor: 'pink',
+          borderColor: 'pink'
+        };
+      };
+
+      var workdayStr = function (item) {
+        return {
+          title: item.chinese,
+          start: item.date,
+          allDay: true,
+          textColor: 'black',
+          backgroundColor: 'white',
+          borderColor: 'white'
+        };
+      };
+
+      var makeupdayStr = function (item) {
+        return {
+          title: item.holidaycategory,
+          start: item.date,
+          allDay: true,
+          textColor: 'blue',
+          backgroundColor: 'white',
+          borderColor: 'white'
+        };
+      };
+
+      $.getJSON(url, function (data) {
+        for (var i in data) {
+          var item = data[i];
+          item.date = item.date.replace('\\', '');
+
+          if (item.isholiday == '是') {
+            if (item.holidaycategory == '特殊節日') {
+              let myDate = new Date(item.date);
+              if (myDate.getDay() == 6 || myDate.getDay() == 0)
+                caldays.push(holidayStr(item));
+              else
+                caldays.push(workdayStr(item));
+            } else
+              caldays.push(holidayStr(item));
+          } else {
+            if (item.holidaycategory == '特殊上班日')
+              caldays.push(makeupdayStr(item));
+            else
+              caldays.push(workdayStr(item));
+          }
+        }
+
+        $('#calendar').fullCalendar({
+          fixedWeekCount: false,
+          contentHeight: 'auto',
+          viewRender: function (view, element) {
+            var curDate = $('#calendar').fullCalendar('getDate');
+            var months = ',1月,2月,3月,4月,5月,6月,7月,8月,9月,10月,11月,12月'.split(',');
+            var year = '民國' + (moment(curDate).format('YYYY') - 1911) + '年';
+            var mon = months[moment(curDate).format('M')];
+
+            var today = new Date();
+            var weekdays = '日,一,二,三,四,五,六'.split(',');
+
+            $('.fc-left').empty().append('<b>' + year + mon + '</b>');
+            $('.fc-today-button').html(
+              '今天：' +
+              (today.getFullYear() - 1911) + '/' +
+              (today.getMonth() + 1) + '/' +
+              today.getDate() +
+              '(' + weekdays[today.getDay()] + ')'
+            );
+          },
+          events: caldays,
+          eventRender: function (event, element, view) {
+            var dateString = event.start.format('YYYY-MM-DD');
+            if (event.textColor == 'red')
+              $(view.el[0]).find('.fc-day[data-date=' + dateString + ']').css('background-color', 'rgba(255, 0, 60, 0.14)');
+          }
+        });
+
+        $('#calendar').swipe({
+          swipe: function (event, direction, distance, duration, fingerCount, fingerData) {
+            if (direction == 'left') $('#calendar').fullCalendar('next');
+            if (direction == 'right') $('#calendar').fullCalendar('prev');
+          }
+        });
+      });
+
+      var counterNamespace = 'calendar-2077';
+      var counterKey = 'homepage';
+      var counterEl = $('#visitor-count');
+
+      $.getJSON('https://counterapi.dev/api/' + counterNamespace + '/' + counterKey + '/up', function (res) {
+        if (res && typeof res.count !== 'undefined') {
+          counterEl.text(res.count.toLocaleString());
+        } else {
+          counterEl.text('ONLINE');
+        }
+      }).fail(function () {
+        counterEl.text('N/A');
+      });
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      $('.hero, .calendar-panel, .footer').each(function () {
+        observer.observe(this);
+      });
+    });
   </script>
-   </head>
-   
-    <body>
-		<div id='calendar'>
-	
-	    	</div>
-	    	                                    
-	</body>
-小寶
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <div class="kicker">Neon Temporal Interface</div>
+          <h1 class="hero-title">2077 行事曆<span>Calendar System</span></h1>
+          <p class="hero-desc">
+            深黑底層、霓虹訊號、年度節點一覽。保留原始行事曆資料與節假日判斷邏輯，
+            支援左右滑動切換月份，為繁體中文環境重新封裝成 Cyberpunk 2077 風格控制面板。
+          </p>
+        </div>
+        <aside class="status-card">
+          <div class="status-row">
+            <span class="status-label">系統狀態</span>
+            <span class="system-badge">SYSTEM ONLINE</span>
+          </div>
+          <div class="status-row">
+            <span class="status-label">顯示模式</span>
+            <span class="system-badge" style="color:#00f0ff;text-shadow:var(--glow-blue);">ZH-TW / CYBER</span>
+          </div>
+          <div class="status-row">
+            <div class="counter-wrap">
+              <span class="counter-label">Visitors</span>
+              <span id="visitor-count" class="counter-value">...</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="calendar-panel">
+      <div class="panel-topbar">
+        <h2 class="panel-title">Annual Schedule Matrix</h2>
+        <div class="panel-hint">可使用上方按鈕或在手機上左右滑動切換月份</div>
+      </div>
+      <div id="calendar"></div>
+    </section>
+
+    <footer class="footer">© 2077 龍蝦王. <strong>SYSTEM ONLINE.</strong></footer>
+  </main>
+</body>
 </html>
-
-
