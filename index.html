@@ -20,13 +20,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.css" integrity="sha384-WoqbwF/iqimr+Vo3+eXznHiLkBGBSnVODUv0NMHFFfYtx0yq1AVna2FeRcvp1T3t" crossorigin="anonymous">
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/locale/zh-tw.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery-touchswipe@1.6.18/jquery.touchSwipe.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha384-xBuQ/xzmlsLoJpyjoggmTEz8OWUFM0/RC5BsqQBDX2v5cMvDHcMakNTNrHIW2I5f" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js" integrity="sha384-Xtz2F6lyH327Ss8Oo7ji6fYdvuZEC51BeIcxotR5gMncyQSiybXw4IefID59fGvq" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/fullcalendar.min.js" integrity="sha384-Xw3o5lqGRU2Cu2IXqlEPy5UlBqpxYxtbYYmkWQQ8JyyW5plujaXspr/CnMWv1njk" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.8.0/locale/zh-tw.js" integrity="sha384-wMeo0v7KBlZtfImjnbtwcvndh04D5ZhlsapzIVDo5LWueHAMybyUaTQhmzCGX84z" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery-touchswipe@1.6.18/jquery.touchSwipe.min.js" integrity="sha384-lFKKjhTnlHdnnlTS36NoZxIjGH6ErAUdux53a+xl6KaMO9m7WB1Dylak0MG2ibtF" crossorigin="anonymous"></script>
 
   <style>
     :root {
@@ -607,6 +607,8 @@
         }
 
         $('#calendar').fullCalendar({
+          // cal.json 目前僅含 2021-2023 資料，預設開在有資料的區間，避免顯示空月份
+          defaultDate: '2023-01-01',
           fixedWeekCount: false,
           contentHeight: 'auto',
           viewRender: function (view, element) {
